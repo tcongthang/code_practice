@@ -24,10 +24,13 @@ if __name__ == '__main__':
     sContact = 'Test Call'
     sMessage = ('happy to say Hello to you %s now %s' % (sContact, time_send))
 
-    oVSee_Messenger = VSeeMessengerTest(desired_caps=caps_1, user=user, password=password,)
+    oVSee_Messenger = VSeeMessengerTest(desired_caps=caps_1, user=user, password=password)
+
     oVSee_Messenger.actions.login()
     sMessageStatus = oVSee_Messenger.actions.sendMessage(sContact=sContact, sMessage=sMessage)
     # Make sure the message is delivered
     assert sMessageStatus == 'Delivered', 'The message should be Delivered instead of %s' % sMessageStatus
+
     oVSee_Messenger.actions.tearDown()
+    oVSee_Messenger.appium_server.stop()
     # stop appium

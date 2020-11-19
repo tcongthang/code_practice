@@ -151,7 +151,7 @@ class VSeeMessengerActions(object):
         This is the function to exit the currect chat session
         :return:
         """
-        self.oHelp.fwrite('EXIT CHAT BOX')
+        self.oHelp.fwrite('Exiting chat-box')
         self.driver.find_element_by_xpath(self.locator.xpExitChatbox).click()
         self.oHelp.sleep(2)
 

@@ -15,20 +15,16 @@ class VSeeMessengerTest(object):
         self.executor = executor
         # get locator definition
         self.locator = Locators(desired_caps['platformName'])
+        self.appium_server = AppiumServicesHandler()
         self.driver = self.__openVsee()
         self.actions = VSeeMessengerActions(self.driver, user, password=password)
-
-    def tearDown(self):
-        self.driver.quit()
 
     def __openVsee(self):
 
         # Start Appium Server
         # TODO: Thang Truong should have the way to handle appium serve (auto-start, with ip, port ....)
         # todo: Thang Truong - Should we have a better way? example of handle different port & server address
-        appium_server = AppiumServicesHandler()
-        appium_server.start_server()
-
+        self.appium_server.start_server()
         driver = webdriver.Remote(command_executor=self.executor, desired_capabilities=self.desired_caps)
         # Todo:
         driver.implicitly_wait(15)

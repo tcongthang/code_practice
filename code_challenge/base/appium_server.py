@@ -1,3 +1,4 @@
+import platform
 import subprocess
 import os
 from multiprocessing import Process
@@ -21,8 +22,8 @@ class AppiumServicesHandler(object):
         t1 = RunServer(cmd)
         p = Process(target=t1.start())
         p.start()
+        self.oHelper.fwrite('--- Appium services started --- %s' % cmd)
         self.oHelper.sleep(10)
-        self.oHelper.fwrite('Appium services started - %s' % cmd)
 
     def __attached_devices(self):
         devices = []
@@ -51,6 +52,12 @@ class AppiumServicesHandler(object):
         self.oHelper.fwrite('List of AVD devices %s ' % avd)
         return avd
 
+    def stop(self):
+        self.oHelper.fwrite('--- Stop Appium ---')
+        sysstr = platform.system()
+
+        if sysstr == 'Windows':
+            os.popen("taskkill /f /im node.exe")
 
 class RunServer(threading.Thread):
     def __init__(self, cmd):
