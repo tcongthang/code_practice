@@ -7,17 +7,11 @@ from code_challenge.base.vsee_actions import VSeeMessengerActions
 class VSeeMessengerTest(object):
 
     def __init__(self, desired_caps, user, password, executor='http://localhost:4723/wd/hub'):
-        # # set up appium
         self.oHelp = Helper()
-        # # self.appium_server = AppiumService()
-        # # self.appium_server.start(args=['--session-override', '--address', '127.0.0.1', '-p', '4734', ])
-        self.desired_caps = desired_caps
-        self.executor = executor
-        # get locator definition
         self.locator = Locators(desired_caps['platformName'])
         self.appium_server = AppiumServicesHandler()
         self.driver = self.__openVsee()
-        self.actions = VSeeMessengerActions(self.driver, user, password=password)
+        self.actions = VSeeMessengerActions(drive=self.driver, user=user, password=password)
 
     def __openVsee(self):
 

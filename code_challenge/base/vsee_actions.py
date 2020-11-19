@@ -5,10 +5,10 @@ from code_challenge.base.helper import Helper
 class VSeeMessengerActions(object):
 
     def __init__(self, drive, user, password):
-        self.oHelp = Helper()
-        self.driver = drive
         self.locator = Locators()
+        self.oHelp = Helper()
         self.user = user
+        self.driver = drive
         self.password = password
 
     def tearDown(self):
