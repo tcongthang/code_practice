@@ -8,6 +8,8 @@ class VSeeMessengerTest(object):
 
     def __init__(self, desired_caps, user, password, executor='http://localhost:4723/wd/hub'):
         self.oHelp = Helper()
+        self.desired_caps = desired_caps
+        self.executor = executor
         self.locator = Locators(desired_caps['platformName'])
         self.appium_server = AppiumServicesHandler()
         self.driver = self.__openVsee()
