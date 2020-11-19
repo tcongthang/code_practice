@@ -14,3 +14,11 @@ b. Sort the repositories by date updated in descending order.
 ['docker-selenium', 'selenium', 'selenium-ide', 'htmlunit-driver', 'seleniumhq.github.io', 'selenium-google-code-issue-archive', 'selenium-assistant', 'selbot2', 'docs', 'fluent-selenium', 'www.seleniumhq.org', 'heroku-selenium', 'ansible-selenium', 'irc-logs', 'mobile-spec', 'selenium-maven-release-test', 'buck']
 c. The most watchers repository is selenium
 
+
+Mobile automation: you can use whichever method that you know.
+Test app: https://tinyurl.com/ydeumnh9    
+ Write automated test script to test the followings:
+   a. Login using a registered account.
+   b. Send a message to a contact that is on the contact list.
+   
+   
