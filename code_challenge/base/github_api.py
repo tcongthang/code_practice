@@ -12,12 +12,25 @@ class GitApi(object):
         self.password = password
         self.owner = owner
         self.access_token = access_token
+        self.__init_git_api()
+
+    def __init_git_api(self):
+        """This is a function to start the session to git-api"""
         try:
             self.oSession = requests.get(self.url, headers={'Authorization': "Token " + self.access_token}).json()
             # Todo: a debug purpose to be removed
             # print(self.oSession)
         except requests.exceptions.BaseHTTPError as e:
             print(e)
+        if type(self.oSession) == dict:
+            key = 'message'
+            if key in self.oSession.keys():
+                print('Can not get the proper information with such information provided !!! Please check')
+                raise ValueError(self.oSession[key])
+        elif type(self.oSession) == dict:
+            print(self.oSession)
+        else:
+            print('something else')
 
     def get_total_repo(self):
         """
