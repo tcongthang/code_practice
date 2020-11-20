@@ -27,7 +27,7 @@ class GitApi(object):
             if key in self.oSession.keys():
                 print('Can not get the proper information with such information provided !!! Please check')
                 raise ValueError(self.oSession[key])
-        elif type(self.oSession) == dict:
+        elif type(self.oSession) == list:
             print(self.oSession)
         else:
             print('something else')
