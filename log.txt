@@ -1,0 +1,23 @@
+2020-11-26 22:01:52,898 List of AVD devices ['Pixel4XLAPIx64', 'PixelXLAPI30'] 
+2020-11-26 22:01:53,020 List of ADB devices ['emulator-5554'] 
+2020-11-26 22:01:53,033 --- Appium services started --- appium --session-override --log-level error:error -p 4723 -U emulator-5554
+2020-11-26 22:01:53,033 Sleeping for .... 10 seconds ....
+2020-11-26 22:02:17,907 INFO: driver.session_id 9271b610-9bdc-476a-b430-1ee5926569ab
+2020-11-26 22:02:18,011 INFO: current_package com.vsee.vsee.beta
+2020-11-26 22:02:18,104 INFO: driver.current_activity com.vsee.activity.LaunchActivity
+2020-11-26 22:02:18,104 Enter username/email - thangluca@gmail.com
+2020-11-26 22:02:19,503 Enter credential - Tt#270819
+2020-11-26 22:02:20,510 Press SignIn button
+2020-11-26 22:02:32,099 element //androidx.appcompat.app.ActionBar.Tab[@content-desc="Contacts"] is found after 0
+2020-11-26 22:02:32,213 ALREADY ON Contact VIEW
+2020-11-26 22:02:32,378 Sleeping for .... 2 seconds ....
+2020-11-26 22:02:35,379 Sleeping for .... 2 seconds ....
+2020-11-26 22:02:38,680 Sleeping for .... 2 seconds ....
+2020-11-26 22:02:40,687 Message: happy to say Hello to you Test Call now 26/11/2020 22:01 should be sent to Test Call
+2020-11-26 22:02:56,401 Exiting chat-box
+2020-11-26 22:02:56,531 Sleeping for .... 2 seconds ....
+2020-11-26 22:02:58,545 Switch to More
+2020-11-26 22:02:58,793 Sleeping for .... 2 seconds ....
+2020-11-26 22:03:06,276 element android.widget.TextView is found after 0
+2020-11-26 22:03:06,276 Bye & See you soon VSee Messenger
+2020-11-26 22:03:07,035 --- Stop Appium ---
