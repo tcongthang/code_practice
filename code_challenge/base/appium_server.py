@@ -17,8 +17,7 @@ class AppiumServicesHandler(object):
         """start the appium server
         """
         cmd = "appium --session-override --log-level error:error -p %s -U %s" % (self.port, self.devices)
-        # os.system(cmd)
-        # time.sleep(10)
+
         t1 = RunServer(cmd)
         p = Process(target=t1.start())
         p.start()
@@ -35,7 +34,16 @@ class AppiumServicesHandler(object):
             t = item.decode().split("\tdevice")
             if len(t) >= 2:
                 devices.append(t[0])
+
+        try:
+            devices[0]
+        except IndexError:
+            # TODO method to start ADB if don't have
+            self.oHelper.fwrite('!!!!!!!!!!! WARNING - There no ADB (Android Debug Bridge) !!!!!!!!!!')
+            return None
+
         self.oHelper.fwrite('List of ADB devices %s ' % devices)
+
         return devices
 
     def __avd_devices(self):

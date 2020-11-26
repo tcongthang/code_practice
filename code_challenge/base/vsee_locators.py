@@ -34,6 +34,7 @@ class Locators(object):
             self.csContactView = 'android.view.ViewGroup'
             self.csWelcome = 'android.widget.TextView'
             self.xpLstContact = "//*[@resource-id='com.vsee.vsee.beta:id/itemContactListNameView']"
+            self.xpChatIconInContactView = "//*[@resource-id='com.vsee.vsee.beta:id/context_chat']"
 
             # Element on Chats screen-view
             self.xpChatPicker = "//*[@resource-id='com.vsee.vsee.beta:id/chat_picker_name']"

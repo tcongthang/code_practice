@@ -26,6 +26,7 @@ class VSeeMessengerActions(object):
 
         self.oHelp.fwrite('Press SignIn button')
         self.driver.find_element_by_id(self.locator.idSignInBtn).click()
+        assert self.__wait_element(type=By.XPATH, element=self.locator.xpContacts)
 
     def signout(self, bOnChatBox=True):
         """
@@ -41,42 +42,43 @@ class VSeeMessengerActions(object):
             if oMore.get_attribute("selected") == 'true':
                 self.oHelp.fwrite('ALREADY ON MORE VIEW')
             else: # Are we on Home-screen but not More tab?
-                self.switchtoMore()
+                self.switchtoMoreView()
 
         elif bOnChatBox:
             self.exitChatbox()
-            self.switchtoMore()
+            self.switchtoMoreView()
 
         self.driver.find_element_by_xpath(self.locator.xpSignOut).click()
-        return self.__waitforelement(type=By.CLASS_NAME, element=self.locator.csWelcome)
+        return self.__wait_element(type=By.CLASS_NAME, element=self.locator.csWelcome)
 
-    def switchtoContacts(self):
+    def switchtoContactsView(self):
         self.oHelp.fwrite('Switch to Contacts')
         self.driver.find_element_by_xpath(self.locator.xpContacts).click()
         self.oHelp.sleep(2)
 
-    def switchtoChats(self):
+    def switchtoChatsView(self):
         self.oHelp.fwrite('Switch to Chats')
         self.driver.find_element_by_xpath(self.locator.xpChats).click()
         self.oHelp.sleep(2)
 
-    def switchtoCalls(self):
+    def switchtoCallsView(self):
         self.oHelp.fwrite('Switch to Calls')
         self.driver.find_element_by_xpath(self.locator.xpCalls).click()
         self.oHelp.sleep(2)
 
-    def switchtoMore(self):
+    def switchtoMoreView(self):
         self.oHelp.fwrite('Switch to More')
         self.driver.find_element_by_xpath(self.locator.xpMore).click()
         self.oHelp.sleep(2)
 
     # Function relating to Chats view
     def getlistChatPicker(self):
+        """Function to get the list of people we chatted together"""
         org = self.driver.find_element_by_xpath(self.locator.xpChats)
         if org.get_attribute("selected") == 'true':
             self.oHelp.fwrite('ALREADY ON CHATS VIEW')
         else:
-            self.switchtoChats()
+            self.switchtoChatsView()
         return self.driver.find_elements(By.XPATH, self.locator.xpChatPicker)
 
     # Function relating to Contacts view
@@ -97,54 +99,83 @@ class VSeeMessengerActions(object):
         Function to get the list of current Contacts
         :return:
         """
-        # Switch to Contacts tab first
-        self.switchtoContacts()
+        oContact = self.driver.find_element_by_xpath(self.locator.xpContacts)
+        if oContact:
+            if oContact.get_attribute("selected") == 'true':
+                self.oHelp.fwrite('ALREADY ON Contact VIEW')
+            else: # Are we on Home-screen but not More tab?
+                # Switch to Contacts tab first
+                self.switchtoContactsView()
+
         return self.driver.find_elements(By.XPATH, self.locator.xpLstContact)
 
-    def sendMessage(self, sContact='Test Call', sMessage=None):
+    def sendMessage(self, sContact='Test Call', sMessage=None, bTalkedContact=False):
         """
         This is a function to send a message to the Contact who chat together before - showing on Chats view
         :param sContact: People we want to chat
         :param sMessage: text message
         :return: Status of text message or False
         """
-        lstPicker = self.getlistChatPicker()
+        if bTalkedContact:
+            self.switchtoChatsView()
+
+        # if contact is NOT in this list of chat history
+        else:
+            self.startChatFromContactList()
+
         self.oHelp.sleep(2)
+        # Enter message
+        self.driver.find_element_by_xpath(self.locator.xpChatEditTextBox).send_keys(sMessage)
+        # Click send button
+        self.driver.find_element_by_xpath(self.locator.xpSendMessagesBtn).click()
+        self.oHelp.sleep(2)
+        self.oHelp.fwrite('Message: %s should be sent to %s' % (sMessage, sContact))
+        sMessageStatus = self.driver.find_element_by_xpath(self.locator.xpMessageStatus).text
+
+        return sMessageStatus
+
+    def startChatFromChatView(self, sContact='Test Call'):
+        """
+        This is a function to send a message to the Contact who showing on Chats view
+        :param sContact: People we want to chat
+        :return: True/False
+        """
+        # Check if we are on Chat view or not
+        oChatView = self.driver.find_elements(By.XPATH, self.locator.xpChats)
+        if oChatView:
+            if oChatView.get_attribute("selected") == 'true':
+                self.oHelp.fwrite('ALREADY ON CHAT VIEW')
+            else: # Are we on Home-screen but not More tab?
+                self.switchtoChatsView()
+
+        lstPicker = self.getlistChatPicker()
         for oChat in lstPicker:
             if sContact == oChat.text:
                 oChat.click()
-                # self.sleep(2)
-                self.driver.find_element_by_xpath(self.locator.xpChatEditTextBox).send_keys(sMessage)
-                # self.sleep(2)
-                # Click send button
-                self.driver.find_element_by_xpath(self.locator.xpSendMessagesBtn).click()
-                self.oHelp.sleep(2)
-                self.driver.get_screenshot_as_png()
-                self.oHelp.fwrite('Message: %s should be sent to %s' % (sMessage, sContact))
-                sMessageStatus = self.driver.find_element_by_xpath(self.locator.xpMessageStatus).text
 
-                return sMessageStatus
+        return True
 
-        self.oHelp.fwrite('Hey, Look likes the you have never sent message to %s - should use another way' % sContact)
-
-        return False
-
-    def sendFirstMessage(self, sContact='Test Call', sMessage=None):
+    def startChatFromContactList(self, sContact='Test Call'):
         """
         This is a function to send a message to the Contact who has a first chat - not shown on Chats view yet
         :param sContact: People we want to chat
-        :param sMessage: text message
-        :return: Status of text message
+        :return: True/False
         """
-        # Switch to Contacts tab first
-        self.switchtoContacts()
+        # Check if we are on Chat view or not
+
         lstContact = self.getlistContact()
         oElement = None
         for sContactElement in lstContact:
             if sContact == sContactElement.text:
                 oElement = sContactElement
-        self.oHelp.sleep(5)
-        oElement.click()
+                break
+        if oElement:
+            self.oHelp.sleep(2)
+            oElement.click()
+            self.driver.find_element_by_xpath(self.locator.xpChatIconInContactView).click()
+            return True
+        else:
+            return False
 
     def exitChatbox(self):
         """
@@ -155,7 +186,7 @@ class VSeeMessengerActions(object):
         self.driver.find_element_by_xpath(self.locator.xpExitChatbox).click()
         self.oHelp.sleep(2)
 
-    def __waitforelement(self, type, element, nTimeout=30):
+    def __wait_element(self, type, element, nTimeout=30):
         """
         Function to wait for a element to be shown up
         :param type: type of element: By.CLASS_NAME, By.ID, By.XPATH or so on
@@ -166,7 +197,7 @@ class VSeeMessengerActions(object):
         bIsPresent = False
         nInterval = 5
         iTime = 0
-        while nInterval <= nTimeout:
+        while iTime <= nTimeout:
 
             findelement = self.driver.find_elements(type, element)
 
@@ -211,11 +242,3 @@ class VSeeMessengerActions(object):
 
         self.oHelp.fwrite('Check to make sure the Search Contacts box is shown')
         self.driver.find_element_by_id(self.locator.idSearch)
-
-
-    def startNewChat(self):
-        """
-        Function to start a
-        :return:
-        """
-        self.driver.find_element_by_xpath(self.locator.xpTopChatIcon).click()
